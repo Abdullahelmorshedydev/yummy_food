@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Web\Admin\HomeController;
+use App\Http\Controllers\Web\Admin\Settings\FilesSettingsController;
+use App\Http\Controllers\Web\Admin\Settings\GeneralSettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +16,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('admin.pages.index');
+Route::get('/', HomeController::class)->name('index');
+
+Route::prefix('/settings')->as('settings.')->group(function () {
+
+    Route::controller(GeneralSettingsController::class)->prefix('/general')->as('general.')->group(function () {
+
+        Route::get('/', 'index')->name('index');
+        Route::put('/', 'update')->name('update');
+    });
+
+    Route::controller(FilesSettingsController::class)->prefix('/files')->as('files.')->group(function () {
+
+        Route::get('/', 'index')->name('index');
+        Route::put('/', 'update')->name('update');
+    });
 });
